@@ -39,24 +39,24 @@ void stopRobot() {
     analogWrite(ENABLE_RIGHT, 0);
 }
 
-void turnRight() {
+void turnRight(p_val_motor_speed) {
     digitalWrite(MOTOR_LEFT_FORWARD, HIGH);
     digitalWrite(MOTOR_RIGHT_FORWARD, LOW);
     digitalWrite(MOTOR_LEFT_BACKWARD, LOW);
     digitalWrite(MOTOR_RIGHT_BACKWARD, HIGH);
-    analogWrite(ENABLE_LEFT, MOTOR_SPEED);  // Set speed for turning
-    analogWrite(ENABLE_RIGHT, MOTOR_SPEED);
-    delay(500);
+    analogWrite(ENABLE_LEFT, p_val_motor_speed);  // Set speed for turning
+    analogWrite(ENABLE_RIGHT, p_val_motor_speed);
+    // delay(500);
 }
 
-void turnLeft() {
+void turnLeft(p_val_motor_speed) {
     digitalWrite(MOTOR_LEFT_FORWARD, LOW);
     digitalWrite(MOTOR_RIGHT_FORWARD, HIGH);
     digitalWrite(MOTOR_LEFT_BACKWARD, HIGH);
     digitalWrite(MOTOR_RIGHT_BACKWARD, LOW);
-    analogWrite(ENABLE_LEFT, MOTOR_SPEED);  // Set speed for turning
-    analogWrite(ENABLE_RIGHT, MOTOR_SPEED);
-    delay(500);
+    analogWrite(ENABLE_LEFT, p_val_motor_speed );  // Set speed for turning
+    analogWrite(ENABLE_RIGHT, p_val_motor_speed);
+    // delay(500);
 }
 
 
@@ -102,13 +102,19 @@ void loop() {
   else if (rightDistance <= RIGHT_WALL_THRESHOLD && frontDistance <= WALL_THRESHOLD){
       stopRobot();
       delay(1000);
-      turnLeft();
+      output_pwm = MOTOR_SPEED * (10 / frontDistance);
+      if (output_pwm > 50){
+        turnLeft(output_pwm);
+      }
       Serial.println("Case 2");
   }
   else if (rightDistance > RIGHT_WALL_THRESHOLD){
       stopRobot();
       delay(1000);
-      turnRight();
+      output_pwm = MOTOR_SPEED * (10/frontDistance);
+    if (output_pwm > 50){
+        turnRight(output_pwm);
+      }
       Serial.println("Case 3");
   }
 
